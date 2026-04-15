@@ -26,7 +26,22 @@ export const getSingleProduct = async (req: Request, res: Response) => {
   });
 };
 
-export const createProduct = async (req: Request, res: Response) => {};
+export const createProduct = async (req: Request, res: Response) => {
+  const { title, description, price } = req.body;
+  const { menuId } = req.params as { menuId: string };
+  const image = req.image?.secure_url;
+  const product = await Product.create({
+    title,
+    description,
+    price,
+    image,
+    menu: menuId,
+  });
+  res.status(StatusCodes.CREATED).json({
+    success: true,
+    data: product,
+  });
+};
 
 export const updateProduct = async (req: Request, res: Response) => {};
 
