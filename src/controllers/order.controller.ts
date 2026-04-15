@@ -70,6 +70,17 @@ export const getUserAddress = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ data: user, success: true });
 };
 
-export const createOrder = async (req: Request, res: Response) => {};
+export const createOrder = async (req: Request, res: Response) => {
+  if (!req.userData) {
+    throw new UnauthenticatedError("User not authenticated");
+  }
+  const userId = req.userData.userId;
+  const { orderItems } = req.body;
+  if (!orderItems || orderItems.length === 0) {
+    throw new BadRequest("Order items cannot be empty");
+  }
+  const order = await Order.create({ customerId: userId, orderItems });
+  res.status(StatusCodes.CREATED).json({ data: order, success: true });
+};
 
 export const updateOrderStatus = async (req: Request, res: Response) => {};
