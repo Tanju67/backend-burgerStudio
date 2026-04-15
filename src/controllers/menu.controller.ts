@@ -1,13 +1,22 @@
 import type { Request, Response } from "express";
 import Menu from "../models/Menu.js";
 import { StatusCodes } from "http-status-codes";
+import NotFoundError from "../errors/not-found.js";
 
 export const getAllMenu = async (req: Request, res: Response) => {
   const menu = await Menu.find({});
   res.status(StatusCodes.OK).json({ data: menu });
 };
 
-export const getSingleMenu = async (req: Request, res: Response) => {};
+export const getSingleMenu = async (req: Request, res: Response) => {
+  const menuId = req.params.id;
+  const menu = await Menu.findById(menuId);
+
+  if (!menu) {
+    throw new NotFoundError("Not found");
+  }
+  res.status(StatusCodes.OK).json({ data: menu });
+};
 
 export const createMenu = async (req: Request, res: Response) => {};
 
