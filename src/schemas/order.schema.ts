@@ -39,15 +39,11 @@ export const updateOrderStatusSchema = z.object({
 });
 
 export const updateUserAddressSchema = z.object({
-  body: z
-    .object({
-      street: z.string().min(2, "Street is too short").optional(),
-      houseNumber: z.string().min(1, "House number is required").optional(),
-      postalCode: z.string().min(3, "Invalid postal code").optional(),
-      city: z.string().min(2, "City is too short").optional(),
-      phoneNumber: z.string().min(10, "Invalid phone number").optional(),
-    })
-    .refine((data) => Object.keys(data).length > 0, {
-      message: "At least one address field must be provided",
-    }),
+  body: z.object({
+    street: z.string().min(2, "Street is too short"),
+    houseNumber: z.string().min(1, "House number is required"),
+    postalCode: z.string().min(3, "Invalid postal code"),
+    city: z.string().min(1, "City is is required"),
+    phoneNumber: z.string().min(1, "Phone number is required"),
+  }),
 });

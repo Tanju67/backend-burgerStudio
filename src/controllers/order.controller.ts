@@ -5,7 +5,31 @@ import User from "../models/User.js";
 import Order from "../models/Order.js";
 import UnauthenticatedError from "../errors/unauthenticated.js";
 
-export const updateOrderAddress = async (req: Request, res: Response) => {};
+export const updateOrderAddress = async (req: Request, res: Response) => {
+  if (!req.userData) {
+    throw new UnauthenticatedError("User not authenticated");
+  }
+  const userId = req.userData.userId;
+
+  const { street, houseNumber, city, postalCode, phoneNumber } = req.body;
+
+  const updatedData = {
+    street,
+    houseNumber,
+    city,
+    postalCode,
+    phoneNumber,
+  };
+
+  const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+    new: true,
+  }).select("-password");
+
+  res.status(StatusCodes.OK).json({
+    success: true,
+    data: updatedUser,
+  });
+};
 
 export const getAllOrders = async (req: Request, res: Response) => {};
 
