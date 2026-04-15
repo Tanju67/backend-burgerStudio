@@ -10,5 +10,8 @@ declare global {
         role: string;
       };
     }
+    interface Request {
+      image?: UploadApiResponse;
+    }
   }
 }
