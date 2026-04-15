@@ -65,4 +65,15 @@ export const updateProduct = async (req: Request, res: Response) => {
   });
 };
 
-export const deleteProduct = async (req: Request, res: Response) => {};
+export const deleteProduct = async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const product = await Product.findOneAndDelete({ _id: id });
+
+  if (!product) {
+    throw new NotFoundError(`No product found with id: ${id}`);
+  }
+  res.status(StatusCodes.OK).json({
+    success: true,
+    data: product,
+  });
+};
