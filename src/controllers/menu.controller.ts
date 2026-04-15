@@ -3,6 +3,7 @@ import Menu from "../models/Menu.js";
 import { StatusCodes } from "http-status-codes";
 import NotFoundError from "../errors/not-found.js";
 import BadRequest from "../errors/badRequest.js";
+import Product from "../models/Product.js";
 
 export const getAllMenu = async (req: Request, res: Response) => {
   const menu = await Menu.find({});
@@ -55,4 +56,12 @@ export const updateMenu = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({ data: menu });
 };
 
-export const deleteMenu = async (req: Request, res: Response) => {};
+export const deleteMenu = async (req: Request, res: Response) => {
+  const menuId = req.params.id!;
+  const menu = await Menu.findOneAndDelete({ _id: menuId });
+  if (!menu) {
+    throw new NotFoundError("Not found");
+  }
+  await Product.deleteMany({ menu: menuId });
+  res.status(StatusCodes.OK).json({ data: menu });
+};
