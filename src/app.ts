@@ -4,11 +4,9 @@ import cors from "cors";
 
 import express from "express";
 import connectDB from "./utils/connectDB.js";
-
+import authRouter from "./routes/auth.route.js";
 import notFound from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
-
-
 
 const app = express();
 
@@ -33,11 +31,7 @@ app.use(
   }),
 );
 
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
+app.use("/api/v1/auth", authRouter);
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
