@@ -44,7 +44,19 @@ export const getAllOrders = async (req: Request, res: Response) => {
     .json({ data: orders, count: orders.length, success: true });
 };
 
-export const getAllUserOrders = async (req: Request, res: Response) => {};
+export const getAllUserOrders = async (req: Request, res: Response) => {
+  if (!req.userData) {
+    throw new UnauthenticatedError("User not authenticated");
+  }
+  const userId = req.userData.userId;
+  const orders = await Order.find({ customerId: userId })
+    .populate("customerId")
+    .populate("orderItems.product")
+    .sort("-createdAt");
+  res
+    .status(StatusCodes.OK)
+    .json({ data: orders, count: orders.length, success: true });
+};
 
 export const getUserAddress = async (req: Request, res: Response) => {};
 
