@@ -5,6 +5,9 @@ import cors from "cors";
 import express from "express";
 import connectDB from "./utils/connectDB.js";
 
+import notFound from "./middleware/not-found.js";
+import errorHandlerMiddleware from "./middleware/error-handler.js";
+
 
 
 const app = express();
@@ -35,6 +38,9 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 const port = process.env.PORT || 5000;
 
