@@ -31,7 +31,18 @@ export const updateOrderAddress = async (req: Request, res: Response) => {
   });
 };
 
-export const getAllOrders = async (req: Request, res: Response) => {};
+export const getAllOrders = async (req: Request, res: Response) => {
+  const orders = await Order.find({})
+    .populate(
+      "customerId",
+      "fullName street houseNumber city postalCode phoneNumber",
+    )
+    .populate("orderItems.product")
+    .sort("-createdAt");
+  res
+    .status(StatusCodes.OK)
+    .json({ data: orders, count: orders.length, success: true });
+};
 
 export const getAllUserOrders = async (req: Request, res: Response) => {};
 
