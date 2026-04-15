@@ -83,4 +83,13 @@ export const createOrder = async (req: Request, res: Response) => {
   res.status(StatusCodes.CREATED).json({ data: order, success: true });
 };
 
-export const updateOrderStatus = async (req: Request, res: Response) => {};
+export const updateOrderStatus = async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const { status } = req.body;
+  const order = await Order.findByIdAndUpdate(
+    id,
+    { status },
+    { new: true, runValidators: true },
+  );
+  res.status(StatusCodes.OK).json({ data: order, success: true });
+};
