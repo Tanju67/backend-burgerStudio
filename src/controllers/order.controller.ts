@@ -58,7 +58,17 @@ export const getAllUserOrders = async (req: Request, res: Response) => {
     .json({ data: orders, count: orders.length, success: true });
 };
 
-export const getUserAddress = async (req: Request, res: Response) => {};
+export const getUserAddress = async (req: Request, res: Response) => {
+  if (!req.userData) {
+    throw new UnauthenticatedError("User not authenticated");
+  }
+  const userId = req.userData.userId;
+  const user = await User.findById(userId).select(
+    "street houseNumber city postalCode phoneNumber",
+  );
+
+  res.status(StatusCodes.OK).json({ data: user, success: true });
+};
 
 export const createOrder = async (req: Request, res: Response) => {};
 
