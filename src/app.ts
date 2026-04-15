@@ -7,6 +7,7 @@ import connectDB from "./utils/connectDB.js";
 import authRouter from "./routes/auth.route.js";
 import menuRoute from "./routes/menu.route.js";
 import productRoute from "./routes/product.route.js";
+import orderRoute from "./routes/order.route.js";
 import notFound from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 
@@ -36,6 +37,7 @@ app.use(
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/menu", menuRoute);
 app.use("/api/v1/product", productRoute);
+app.use("/api/v1/order", orderRoute);
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
