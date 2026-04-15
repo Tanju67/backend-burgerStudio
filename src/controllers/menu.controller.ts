@@ -1,6 +1,11 @@
 import type { Request, Response } from "express";
+import Menu from "../models/Menu.js";
+import { StatusCodes } from "http-status-codes";
 
-export const getAllMenu = async (req: Request, res: Response) => {};
+export const getAllMenu = async (req: Request, res: Response) => {
+  const menu = await Menu.find({});
+  res.status(StatusCodes.OK).json({ data: menu });
+};
 
 export const getSingleMenu = async (req: Request, res: Response) => {};
 
