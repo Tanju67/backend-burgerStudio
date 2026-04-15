@@ -43,6 +43,26 @@ export const createProduct = async (req: Request, res: Response) => {
   });
 };
 
-export const updateProduct = async (req: Request, res: Response) => {};
+export const updateProduct = async (req: Request, res: Response) => {
+  const { id } = req.params as { id: string };
+  const updateData = { ...req.body };
+
+  if (req.image) {
+    updateData.image = req.image.secure_url;
+  }
+  const product = await Product.findByIdAndUpdate(id, updateData, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!product) {
+    throw new NotFoundError(`No product found with id: ${id}`);
+  }
+
+  res.status(StatusCodes.OK).json({
+    success: true,
+    data: product,
+  });
+};
 
 export const deleteProduct = async (req: Request, res: Response) => {};

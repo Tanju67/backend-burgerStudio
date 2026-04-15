@@ -17,13 +17,17 @@ export const createProductSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
-  body: z.object({
-    title: z.string().min(3).max(100).optional(),
-    description: z.string().min(10).optional(),
-    price: z
-      .string()
-      .transform((val) => Number(val))
-      .pipe(z.number().positive())
-      .optional(),
-  }),
+  body: z
+    .object({
+      title: z.string().min(3).max(100).optional(),
+      description: z.string().min(10).optional(),
+      price: z
+        .string()
+        .transform((val) => Number(val))
+        .pipe(z.number().positive())
+        .optional(),
+    })
+    .refine((data) => Object.keys(data).length > 0, {
+      message: "Please provide at least one field to update",
+    }),
 });
