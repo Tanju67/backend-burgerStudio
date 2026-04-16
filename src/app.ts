@@ -3,6 +3,7 @@ import "express-async-errors";
 import cors from "cors";
 
 import express from "express";
+import swaggerUi from "swagger-ui-express";
 import connectDB from "./utils/connectDB.js";
 import authRouter from "./routes/auth.route.js";
 import menuRoute from "./routes/menu.route.js";
@@ -10,15 +11,21 @@ import productRoute from "./routes/product.route.js";
 import orderRoute from "./routes/order.route.js";
 import notFound from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import { swaggerOptions } from "./docs/swagger.js";
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const allowedOrigins = ["http://localhost:5173", process.env.CLIENT_URL].filter(
-  Boolean,
-) as string[];
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:10000",
+  process.env.CLIENT_URL,
+].filter(Boolean) as string[];
 
 app.use(
   cors({
@@ -34,6 +41,7 @@ app.use(
   }),
 );
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/menu", menuRoute);
 app.use("/api/v1/product", productRoute);
