@@ -4,7 +4,7 @@ import NotFoundError from "../errors/not-found.js";
 import Product from "../models/Product.js";
 
 export const getAllMenuProduct = async (req: Request, res: Response) => {
-  const { menuId } = req.params as { menuId: string };
+  const { id: menuId } = req.params as { id: string };
   const products = await Product.find({ menu: menuId }).populate("menu").lean();
   res.status(StatusCodes.OK).json({
     success: true,
@@ -28,7 +28,7 @@ export const getSingleProduct = async (req: Request, res: Response) => {
 
 export const createProduct = async (req: Request, res: Response) => {
   const { title, description, price } = req.body;
-  const { menuId } = req.params as { menuId: string };
+  const { id: menuId } = req.params as { id: string };
   const image = req.image?.secure_url;
   const product = await Product.create({
     title,
@@ -74,6 +74,6 @@ export const deleteProduct = async (req: Request, res: Response) => {
   }
   res.status(StatusCodes.OK).json({
     success: true,
-    data: product,
+    message: "Product deleted successfully",
   });
 };

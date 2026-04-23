@@ -50,7 +50,7 @@ export const getAllUserOrders = async (req: Request, res: Response) => {
   }
   const userId = req.userData.userId;
   const orders = await Order.find({ customerId: userId })
-    .populate("customerId")
+    .populate("customerId", "-password")
     .populate("orderItems.product")
     .sort("-createdAt");
   res

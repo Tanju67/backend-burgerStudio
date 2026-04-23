@@ -21,14 +21,14 @@ import { mongoIdSchema } from "../schemas/menu.schema.js";
 
 const router = express.Router();
 
-router.get("/menu/:menuId", getAllMenuProduct);
+router.get("/menu/:id", getAllMenuProduct);
 
 router.get("/:id", getSingleProduct);
 
 router.use(checkAuth, authorizePermission("admin", "test-admin"));
 
 router.post(
-  "/:menuId",
+  "/:id",
   restrictTestAdmin,
   validate(mongoIdSchema),
   upload.single("image"),
