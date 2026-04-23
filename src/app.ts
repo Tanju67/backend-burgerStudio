@@ -24,6 +24,8 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:10000",
+  "http://localhost:80",
+  "http://localhost",
   process.env.CLIENT_URL,
 ].filter(Boolean) as string[];
 
