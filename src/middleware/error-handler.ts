@@ -17,7 +17,6 @@ const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.error("HATA YAKALANDI:", err);
   let customError = {
     // set default
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,

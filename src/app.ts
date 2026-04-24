@@ -47,14 +47,6 @@ const port = process.env.PORT || 5000;
 
 const start = async () => {
   try {
-    console.log(
-      "JWT_SECRET Kontrolü:",
-      process.env.JWT_SECRET ? "OK ✅" : "BOŞ! ❌",
-    );
-    console.log(
-      "MONGO_URI Kontrolü:",
-      process.env.MONGO_URI ? "OK ✅" : "BOŞ! ❌",
-    );
     if (!process.env.MONGO_URI) {
       throw new Error("MONGO_URI is not defined");
     }
