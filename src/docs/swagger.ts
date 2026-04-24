@@ -14,8 +14,8 @@ export const swaggerOptions: Options = {
     },
     servers: [
       {
-        url: `http://localhost:10000`,
-        description: "Development Server",
+        url: `http://16.170.251.184:10000`, // <--- Localhost yerine IP yaz
+        description: "Production Server",
       },
     ],
     components: {

@@ -16,32 +16,19 @@ import { swaggerOptions } from "./docs/swagger.js";
 
 const app = express();
 
+app.use(
+  cors({
+    origin: true, // Her yerden gelen isteğe izin ver (veya 'http://16.170.251.184' yaz)
+    credentials: true, // Cookie ve Token geçişine izin verir
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:10000",
-  "http://localhost:80",
-  "http://localhost",
-  process.env.CLIENT_URL,
-].filter(Boolean) as string[];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/auth", authRouter);
@@ -56,6 +43,14 @@ const port = process.env.PORT || 5000;
 
 const start = async () => {
   try {
+    console.log(
+      "JWT_SECRET Kontrolü:",
+      process.env.JWT_SECRET ? "OK ✅" : "BOŞ! ❌",
+    );
+    console.log(
+      "MONGO_URI Kontrolü:",
+      process.env.MONGO_URI ? "OK ✅" : "BOŞ! ❌",
+    );
     if (!process.env.MONGO_URI) {
       throw new Error("MONGO_URI is not defined");
     }

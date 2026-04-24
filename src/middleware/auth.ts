@@ -24,21 +24,23 @@ export const checkAuth = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new UnauthenticatedError("Authentication invalid: No token provided");
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  if (!token || !process.env.JWT_SECRET) {
-    throw new UnauthenticatedError(
-      "Authentication invalid: Token missing or configuration error",
-    );
-  }
-
   try {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({
+        message: "Authentication invalid: No token provided",
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    if (!token || !process.env.JWT_SECRET) {
+      return res.status(401).json({
+        message: "Authentication invalid: Token expired or invalid",
+      });
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
     if (decoded && decoded.userId && decoded.role) {
@@ -48,16 +50,17 @@ export const checkAuth = async (
         email: decoded.email,
         role: decoded.role,
       };
-      next();
+      return next(); // Başarılıysa devam et
     } else {
-      throw new UnauthenticatedError(
-        "Authentication invalid: Payload malformed",
-      );
+      return res.status(401).json({
+        message: "Authentication invalid: Token expired or tampered",
+      });
     }
   } catch (error) {
-    throw new UnauthenticatedError(
-      "Authentication invalid: Token expired or tampered",
-    );
+    // JWT Verify hatası (expired, invalid vb.) buraya düşer
+    return res.status(401).json({
+      message: "Authentication invalid: Token expired or invalid",
+    });
   }
 };
 

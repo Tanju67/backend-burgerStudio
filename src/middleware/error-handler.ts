@@ -17,6 +17,7 @@ const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction,
 ) => {
+  console.error("HATA YAKALANDI:", err);
   let customError = {
     // set default
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
@@ -53,6 +54,8 @@ const errorHandlerMiddleware = (
     customError.statusCode = 404;
   }
 
+  res.header("Access-Control-Allow-Origin", "http://16.170.251.184");
+  res.header("Access-Control-Allow-Credentials", "true");
   return res
     .status(customError.statusCode)
     .json({ message: customError.message });
