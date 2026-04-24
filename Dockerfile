@@ -10,9 +10,16 @@ RUN npm run build
 FROM node:20-slim
 WORKDIR /app
 COPY package*.json ./
-# Sadece gerekli kütüphaneleri kuruyoruz (devDependencies hariç)
+
+# Sadece üretim kütüphanelerini kur
 RUN npm install --omit=dev
-# Sadece derlenmiş dosyaları builder'dan alıyoruz
+
+# Derlenen dosyaları builder'dan çek
 COPY --from=builder /app/dist ./dist
-EXPOSE 5000
+
+# Render için portu 10000 yapıyoruz
+ENV PORT=10000
+EXPOSE 10000
+
+# Uygulamanın giriş dosyasının dist/app.js olduğundan emin ol
 CMD ["node", "dist/app.js"]

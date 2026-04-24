@@ -18,10 +18,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: true, // Her yerden gelen isteğe izin ver (veya 'http://16.170.251.184' yaz)
-    credentials: true, // Cookie ve Token geçişine izin verir
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: [
+      "https://frontend-burgerstudio.onrender.com",
+      "http://localhost:5173",
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type, Authorization",
   }),
 );
 
